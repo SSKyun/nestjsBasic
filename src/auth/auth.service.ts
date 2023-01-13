@@ -52,7 +52,7 @@ export class AuthService {
     private flatAuthorities(user: any): User {
         if(user && user.authorities){
             const authorities: string[] = [];
-            user.forEach(authoritiy=> authoritiy.push(authoritiy.authorityName));
+            user.forEach(authoritiy=> authorities.push(authoritiy.authorityName));
             user.authorities = authorities;
         }
         return user;

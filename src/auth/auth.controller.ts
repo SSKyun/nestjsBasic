@@ -1,7 +1,11 @@
-import { Body, Controller, Post, Req, Res } from '@nestjs/common';
+import { RolesGuard } from './security/roles.guard';
+import { Body, Controller, Post, Req, Res, Get, UseGuards } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { UserDTO } from './dto/user.dto';
+import { Roles } from './decorator/role.decorator';
+import { RoleType } from './rolo-type';
+import { AuthGuard } from './security/auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -17,5 +21,13 @@ export class AuthController {
         const jwt = await this.authService.validateUser(userDTO);
         res.setHeader('Authorization', 'Bearer '+jwt.accessToken);
         return res.json(jwt);
+    }
+
+    @Get('/admmin-role')
+    @UseGuards(AuthGuard,RolesGuard)
+    @Roles(RoleType.ADMIN)
+    adminRoleCheck(@Req() req: Request): any {
+        const user:any = req.body;
+        return user;
     }
 }
